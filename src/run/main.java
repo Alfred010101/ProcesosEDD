@@ -10,7 +10,7 @@ import vista.VentanaPrincipal;
  *
  * @author Alfred
  */
-public class main
+public class Main
 {
 
     public static void main(String[] args)

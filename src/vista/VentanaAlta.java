@@ -14,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
+//import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -31,7 +31,8 @@ public class VentanaAlta extends JDialog
     private GridBagConstraints gbConstraints;
     private JTextField nombre;
     private JTextField quantums;
-    private JComboBox prioridad;
+    //private JComboBox prioridad;
+    private JTextField prioridad;
     private JButton cargar;
     private final DrawingPanel drawingPanel;
 
@@ -49,18 +50,20 @@ public class VentanaAlta extends JDialog
 
     private void initComponents()
     {
-        String[] items =
-        {
-            "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
-        };
+//        String[] items =
+//        {
+//            "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"
+//        };
 
-        prioridad = new JComboBox(items);
+        //prioridad = new JComboBox(items);
+        prioridad = new JTextField(20);
         nombre = new JTextField(20);
         quantums = new JTextField(20);
         cargar = new JButton("Cargar Proceso");
 
         gbConstraints = new GridBagConstraints();
 
+        prioridad.setMinimumSize(new Dimension(45, quantums.getPreferredSize().height));
         nombre.setMinimumSize(new Dimension(180, nombre.getPreferredSize().height));
         quantums.setMinimumSize(new Dimension(45, quantums.getPreferredSize().height));
 
@@ -72,6 +75,15 @@ public class VentanaAlta extends JDialog
         this.addComponent(quantums, 4, 1, 1, 1, GridBagConstraints.WEST);
         this.addComponent(cargar, 6, 2, 1, 1, GridBagConstraints.WEST);
 
+        prioridad.addKeyListener(new KeyAdapter()
+        {
+            @Override
+            public void keyPressed(KeyEvent e)
+            {
+                enterKeyPressed(e, prioridad.getText(), nombre);
+            }
+        });
+        
         nombre.addKeyListener(new KeyAdapter()
         {
             @Override
@@ -125,11 +137,14 @@ public class VentanaAlta extends JDialog
 
     private void cargarPoceso()
     {
-        if (Ctrl.esNumeroValido(quantums.getText().trim()) && !nombre.getText().trim().isBlank())
+        //if (Ctrl.esNumeroValido(quantums.getText().trim()) && !nombre.getText().trim().isBlank())
+        if (Ctrl.esNumeroValido(quantums.getText().trim()) && !nombre.getText().trim().isBlank() && Ctrl.esNumeroValido(prioridad.getText().trim()))
         {
             if (!Ctrl.buscarProceso(Var.getLista(), nombre.getText()))
             {
-                if (Ctrl.cargarPoceso(Var.getLista(), new Proceso(prioridad.getSelectedIndex() + 1, nombre.getText(), Integer.parseInt(quantums.getText().trim()))))
+                //if (Ctrl.cargarPoceso(Var.getLista(), new Proceso(prioridad.getSelectedIndex() + 1, nombre.getText(), Integer.parseInt(quantums.getText().trim()))))
+                if (Ctrl.cargarPoceso(Var.getLista(), new Proceso(Integer.parseInt(prioridad.getText().trim())
+                        , nombre.getText(), Integer.parseInt(quantums.getText().trim()))))
                 {
                     if (ManipulacionArchivos.guardar(Var.getLista(), "datos.dat"))
                     {
